@@ -1,6 +1,0 @@
-[nginx]
-name=nginx repo
-baseurl=http://plinmgr1v.standardbank.co.za/repo/software/nginx/
-enabled=1
-gpgcheck=0
-sslverify=false
