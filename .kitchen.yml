@@ -1,0 +1,44 @@
+# Drivers indicate the source of the base machines. For this example we are using
+# a vagrant box. Other options are available and can be found at http://kitchen.ci/
+driver:
+  name: vagrant
+  synced_folders:
+    - <%= [ ENV['KITCHEN_UTILS'], '/mnt/share', 'disabled: false'] %>
+  network:
+    # - ["forwarded_port", {guest: 80, host: 80}]
+    - ['private_network', {ip: '192.168.56.90'}]
+
+# Provisioner is responsible for executing the chef cookbook. It will install
+# the required components to execute chef. For this example we use chef_zero as
+# the provisioner.
+provisioner:
+  name: chef_zero
+#  http_proxy: <%= ENV['http_proxy'] %>
+#  https_proxy: <%= ENV['http_proxy'] %>
+  chef_omnibus_url: file:///mnt/share/install.sh
+
+# Platform indicates the base machine that will be provisioned on. For this
+# platform we use the hasicorp/precise base box. Please ensure that the box has
+# been downloaded by running `vagrant box add hashicorp/precise64` first.
+platforms:
+  # - name: ubuntu/xenial64
+  - name: centos-6.6
+    driver:
+      box: 'centos-6.6'
+      # box_url: "http://plinmgr1v.standardbank.co.za/repo/vagrant_boxes/opscode_centos-6.6_chef-provisionerless.box"
+
+# Suites defines the different types of provisioning that will be performed. For
+# this example we will only have one suite, but multiple suites can be implement
+# for different platforms, configuration or recipes.
+suites:
+  - name: test
+    # Run list indicates the recipes to run on the box.
+    run_list:
+      - recipe[chef_example::nginx]
+      - recipe[chef_example::node]
+    attributes:
+      chef-client:
+        # Allows your Chef run to fetch stuff it requires
+#        config:
+#          http_proxy: <%= ENV['http_proxy'] %>
+#          https_proxy: <%= ENV['http_proxy'] %>
