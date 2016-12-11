@@ -1,7 +1,0 @@
-DEPENDENCIES
-  chef_example
-    path: .
-    metadata: true
-
-GRAPH
-  chef_example (0.1.0)
